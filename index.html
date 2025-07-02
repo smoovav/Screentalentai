@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News Woman Image Generator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .container {
+            background-color: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+        }
+        .image-placeholder {
+            width: 100%;
+            height: 400px; /* Adjusted height for full body */
+            background-color: #e0e0e0;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #666;
+            font-size: 1.2rem;
+            border: 2px dashed #ccc;
+            overflow: hidden;
+        }
+        .image-placeholder img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain; /* Ensure the full image is visible */
+            border-radius: 10px;
+        }
+        .loading-spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .message-box {
+            background-color: #fff3cd;
+            border: 1px solid #ffeeba;
+            color: #856404;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-2xl font-bold text-gray-800">News Woman Image Generator</h1>
+        <div id="imageContainer" class="image-placeholder">
+            <div class="loading-spinner" id="loadingSpinner"></div>
+        </div>
+        <p class="text-gray-600">
+            Here is a photorealistic full-body shot of a <span id="ethnicityText" class="font-semibold"></span> news woman, <span id="poseText" class="font-semibold"></span>, reporting from a <span id="environmentText" class="font-semibold"></span>. She has <span id="hairColorText" class="font-semibold"></span>, <span id="hairStyleText" class="font-semibold"></span> hair, and is wearing a <span id="blouseColorText" class="font-semibold"></span> blouse, a <span id="skirtColorText" class="font-semibold"></span> pencil skirt, <span id="hosieryColorText" class="font-semibold"></span> hosiery, and <span id="heelsColorText" class="font-semibold"></span> high heels. The outfit is professional, modern, stylish, and sophisticated, without a blazer.
+        </p>
+        <div id="messageBox" class="message-box"></div>
+    </div>
+
+    <script type="module">
+        const imageContainer = document.getElementById('imageContainer');
+        const loadingSpinner = document.getElementById('loadingSpinner');
+        const messageBox = document.getElementById('messageBox');
+        const ethnicityText = document.getElementById('ethnicityText');
+        const poseText = document.getElementById('poseText');
+        const environmentText = document.getElementById('environmentText');
+        const blouseColorText = document.getElementById('blouseColorText');
+        const skirtColorText = document.getElementById('skirtColorText');
+        const heelsColorText = document.getElementById('heelsColorText');
+        const hosieryColorText = document.getElementById('hosieryColorText');
+        const hairStyleText = document.getElementById('hairStyleText');
+        const hairColorText = document.getElementById('hairColorText');
+
+        // Define lists for all dynamic attributes
+        const ethnicities = ["Caucasian", "Spanish", "Japanese"];
+        const poses = ["standing professionally", "sitting on a high news chair"];
+        const environments = [
+            "modern news studio",
+            "bustling city street",
+            "parliament building exterior",
+            "conference room",
+            "outdoor event stage",
+            "disaster relief zone (professional, non-graphic)",
+            "busy airport terminal",
+            "historical landmark background",
+            "scientific laboratory",
+            "sports arena sidelines"
+        ];
+        const blouseColors = [
+            "crisp white", "pearl white", "cream white", "ivory", "off-white", "snow white", "bone white", "linen white", "alabaster"
+        ];
+        const skirtColors = [
+            "navy blue", "charcoal gray", "black", "burgundy", "emerald green",
+            "royal blue", "tan", "chocolate brown", "dark purple", "olive green"
+        ];
+        const heelsColors = [
+            "black", "nude", "navy blue", "burgundy", "silver", "gold", "dark brown", "matching the skirt"
+        ];
+        const hosieryColors = [
+            "sheer nude", "light tan", "black sheer", "charcoal sheer", "espresso sheer"
+        ];
+        const hairStyles = [
+            "sleek bob", "elegant updo", "long wavy hair", "straight shoulder-length", "chic ponytail", "braided updo", "voluminous curls"
+        ];
+        const hairColors = [
+            "dark brown", "black", "auburn", "blonde", "light brown", "caramel highlights", "dark blonde", "chestnut"
+        ];
+
+        async function generateImage() {
+            loadingSpinner.style.display = 'block';
+            imageContainer.innerHTML = '';
+            imageContainer.appendChild(loadingSpinner);
+
+            // Randomly select for all dynamic attributes
+            const selectedEthnicity = ethnicities[Math.floor(Math.random() * ethnicities.length)];
+            const selectedPose = poses[Math.floor(Math.random() * poses.length)];
+            const selectedEnvironment = environments[Math.floor(Math.random() * environments.length)];
+            const selectedBlouseColor = blouseColors[Math.floor(Math.random() * blouseColors.length)];
+            const selectedSkirtColor = skirtColors[Math.floor(Math.random() * skirtColors.length)];
+            const selectedHeelsColor = heelsColors[Math.floor(Math.random() * heelsColors.length)];
+            const selectedHosieryColor = hosieryColors[Math.floor(Math.random() * hosieryColors.length)];
+            const selectedHairStyle = hairStyles[Math.floor(Math.random() * hairStyles.length)];
+            const selectedHairColor = hairColors[Math.floor(Math.random() * hairColors.length)];
+
+            // Update text in description
+            ethnicityText.textContent = selectedEthnicity;
+            poseText.textContent = selectedPose;
+            environmentText.textContent = selectedEnvironment;
+            blouseColorText.textContent = selectedBlouseColor;
+            skirtColorText.textContent = selectedSkirtColor;
+            heelsColorText.textContent = selectedHeelsColor;
+            hosieryColorText.textContent = selectedHosieryColor;
+            hairStyleText.textContent = selectedHairStyle;
+            hairColorText.textContent = selectedHairColor;
+
+            // Construct the prompt with all dynamic elements, including environment
+            const prompt = `photorealistic image, shot with Canon EOS R5 C, high detail, full body shot of a ${selectedEthnicity} news woman, ${selectedPose}, facing forward, reporting from a ${selectedEnvironment}. She has ${selectedHairColor}, ${selectedHairStyle} hair. She is wearing a ${selectedBlouseColor} visible blouse, a ${selectedSkirtColor} pencil skirt, ${selectedHosieryColor} hosiery, and ${selectedHeelsColor} high heels. No blazer. The outfit is modern, stylish, sophisticated, and appropriate. Clear and well-lit.`;
+            const payload = { instances: { prompt: prompt }, parameters: { "sampleCount": 1} };
+            const apiKey = "";
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-002:predict?key=${apiKey}`;
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(`API error: ${response.status} - ${errorData.error.message || 'Unknown error'}`);
+                }
+
+                const result = await response.json();
+
+                if (result.predictions && result.predictions.length > 0 && result.predictions[0].bytesBase64Encoded) {
+                    const imageUrl = `data:image/png;base64,${result.predictions[0].bytesBase64Encoded}`;
+                    const imgElement = document.createElement('img');
+                    imgElement.src = imageUrl;
+                    imgElement.alt = `Generated News Woman (${selectedEthnicity}, ${selectedPose}, ${selectedEnvironment})`;
+                    imgElement.onload = () => {
+                        loadingSpinner.style.display = 'none';
+                        imageContainer.innerHTML = '';
+                        imageContainer.appendChild(imgElement);
+                    };
+                    imgElement.onerror = () => {
+                        loadingSpinner.style.display = 'none';
+                        displayMessage("Failed to load image. Please try again.", "error");
+                    };
+                } else {
+                    loadingSpinner.style.display = 'none';
+                    displayMessage("No image data received from the API. Please try again.", "warning");
+                }
+            } catch (error) {
+                loadingSpinner.style.display = 'none';
+                console.error("Error generating image:", error);
+                displayMessage(`Error generating image: ${error.message}. Please try again.`, "error");
+            }
+        }
+
+        window.onload = generateImage;
+    </script>
+</body>
+</html>
