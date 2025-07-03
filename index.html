@@ -27,6 +27,7 @@
             text-align: center;
             display: flex;
             flex-direction: column;
+            gap: 20px;
         }
         .image-placeholder {
             width: 100%;
@@ -78,7 +79,7 @@
             <div class="loading-spinner" id="loadingSpinner"></div>
         </div>
         <p class="text-gray-600">
-            Here is a photorealistic full-body shot of a <span id="ethnicityText" class="font-semibold"></span> news woman, <span id="poseText" class="font-semibold"></span>, reporting from a <span id="environmentText" class="font-semibold"></span>. She has <span id="hairColorText" class="font-semibold"></span>, <span id="hairStyleText" class="font-semibold"></span> hair, and is wearing a <span id="blouseColorText" class="font-semibold"></span> blouse, a <span id="skirtColorText" class="font-semibold"></span> pencil skirt, <span id="hosieryColorText" class="font-semibold"></span> hosiery, and <span id="heelsColorText" class="font-semibold"></span> high heels. The outfit is professional, modern, stylish, and sophisticated, without a blazer.
+            Here is a photorealistic full-body shot of a <span id="ethnicityText" class="font-semibold"></span> news woman, <span id="poseText" class="font-semibold"></span>, reporting from a <span id="environmentText" class="font-semibold"></span>. She has <span id="hairColorText" class="font-semibold"></span>, <span id="hairStyleText" class="font-semibold"></span> hair, and is wearing a <span id="blouseColorText" class="font-semibold"></span> <span id="blouseStyleText" class="font-semibold"></span>, a <span id="skirtColorText" class="font-semibold"></span> <span id="skirtStyleText" class="font-semibold"></span>, <span id="hosieryColorText" class="font-semibold"></span> hosiery, and <span id="heelsColorText" class="font-semibold"></span> <span id="shoeStyleText" class="font-semibold"></span>. The outfit is professional, modern, stylish, and sophisticated, without a blazer.
         </p>
         <div id="messageBox" class="message-box"></div>
     </div>
@@ -91,8 +92,11 @@
         const poseText = document.getElementById('poseText');
         const environmentText = document.getElementById('environmentText');
         const blouseColorText = document.getElementById('blouseColorText');
+        const blouseStyleText = document.getElementById('blouseStyleText');
         const skirtColorText = document.getElementById('skirtColorText');
+        const skirtStyleText = document.getElementById('skirtStyleText');
         const heelsColorText = document.getElementById('heelsColorText');
+        const shoeStyleText = document.getElementById('shoeStyleText'); // New element for shoe style
         const hosieryColorText = document.getElementById('hosieryColorText');
         const hairStyleText = document.getElementById('hairStyleText');
         const hairColorText = document.getElementById('hairColorText');
@@ -115,12 +119,24 @@
         const blouseColors = [
             "crisp white", "pearl white", "cream white", "ivory", "off-white", "snow white", "bone white", "linen white", "alabaster"
         ];
+        const blouseStyles = [
+            "button-up blouse", "silk wrap blouse", "sleeveless shell top", "ruffled high-neck blouse",
+            "peplum blouse", "tie-neck blouse", "cowl neck blouse", "collared blouse"
+        ];
         const skirtColors = [
             "navy blue", "charcoal gray", "black", "burgundy", "emerald green",
             "royal blue", "tan", "chocolate brown", "dark purple", "olive green"
         ];
+        const skirtStyles = [
+            "classic pencil skirt", "A-line skirt", "midi skirt", "pleated midi skirt",
+            "straight skirt", "wrap skirt"
+        ];
         const heelsColors = [
             "black", "nude", "navy blue", "burgundy", "silver", "gold", "dark brown", "matching the skirt"
+        ];
+        const shoeStyles = [ // New list for shoe styles
+            "pump heels", "stiletto heels", "block heel pumps", "kitten heel pumps",
+            "slingback heels", "pointed-toe heels"
         ];
         const hosieryColors = [
             "sheer nude", "light tan", "black sheer", "charcoal sheer", "espresso sheer"
@@ -142,8 +158,11 @@
             const selectedPose = poses[Math.floor(Math.random() * poses.length)];
             const selectedEnvironment = environments[Math.floor(Math.random() * environments.length)];
             const selectedBlouseColor = blouseColors[Math.floor(Math.random() * blouseColors.length)];
+            const selectedBlouseStyle = blouseStyles[Math.floor(Math.random() * blouseStyles.length)];
             const selectedSkirtColor = skirtColors[Math.floor(Math.random() * skirtColors.length)];
+            const selectedSkirtStyle = skirtStyles[Math.floor(Math.random() * skirtStyles.length)];
             const selectedHeelsColor = heelsColors[Math.floor(Math.random() * heelsColors.length)];
+            const selectedShoeStyle = shoeStyles[Math.floor(Math.random() * shoeStyles.length)]; // Select shoe style
             const selectedHosieryColor = hosieryColors[Math.floor(Math.random() * hosieryColors.length)];
             const selectedHairStyle = hairStyles[Math.floor(Math.random() * hairStyles.length)];
             const selectedHairColor = hairColors[Math.floor(Math.random() * hairColors.length)];
@@ -153,14 +172,17 @@
             poseText.textContent = selectedPose;
             environmentText.textContent = selectedEnvironment;
             blouseColorText.textContent = selectedBlouseColor;
+            blouseStyleText.textContent = selectedBlouseStyle;
             skirtColorText.textContent = selectedSkirtColor;
+            skirtStyleText.textContent = selectedSkirtStyle;
             heelsColorText.textContent = selectedHeelsColor;
+            shoeStyleText.textContent = selectedShoeStyle; // Update shoe style text
             hosieryColorText.textContent = selectedHosieryColor;
             hairStyleText.textContent = selectedHairStyle;
             hairColorText.textContent = selectedHairColor;
 
-            // Construct the prompt with all dynamic elements, including environment
-            const prompt = `photorealistic image, shot with Canon EOS R5 C, high detail, full body shot of a ${selectedEthnicity} news woman, ${selectedPose}, facing forward, reporting from a ${selectedEnvironment}. She has ${selectedHairColor}, ${selectedHairStyle} hair. She is wearing a ${selectedBlouseColor} visible blouse, a ${selectedSkirtColor} pencil skirt, ${selectedHosieryColor} hosiery, and ${selectedHeelsColor} high heels. No blazer. The outfit is modern, stylish, sophisticated, and appropriate. Clear and well-lit.`;
+            // Construct the prompt with all dynamic elements, including new shoe style
+            const prompt = `photorealistic image, shot with Canon EOS R5 C, high detail, full body shot of a ${selectedEthnicity} news woman, ${selectedPose}, facing forward, reporting from a ${selectedEnvironment}. She has ${selectedHairColor}, ${selectedHairStyle} hair. She is wearing a ${selectedBlouseColor} ${selectedBlouseStyle}, a ${selectedSkirtColor} ${selectedSkirtStyle}, ${selectedHosieryColor} hosiery, and ${selectedHeelsColor} ${selectedShoeStyle}. No blazer. The outfit is modern, stylish, sophisticated, and appropriate. Clear and well-lit.`;
             const payload = { instances: { prompt: prompt }, parameters: { "sampleCount": 1} };
             const apiKey = "";
             const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-002:predict?key=${apiKey}`;
