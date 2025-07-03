@@ -1,0 +1,11 @@
+[build]
+  functions = "netlify/functions" # Tells Netlify where to find your serverless functions
+
+[functions]
+  node_bundler = "esbuild" # Use esbuild for faster function builds
+  external_node_modules = ["node-fetch", "@google/generative-ai"] # Specify external modules for bundling
+
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
