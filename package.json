@@ -1,0 +1,11 @@
+{
+  "name": "ai-persona-generator-functions",
+  "version": "1.0.0",
+  "description": "Netlify functions for AI Persona Generator",
+  "main": "netlify/functions/generate-image.js",
+  "dependencies": {
+    "@google/generative-ai": "^0.11.0",
+    "node-fetch": "^3.3.2"
+  },
+  "type": "module"
+}
