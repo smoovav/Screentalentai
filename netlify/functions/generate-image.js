@@ -1,7 +1,9 @@
 // netlify/functions/generate-image.js
 
-// Import the Google Generative AI SDK
-import { GoogleGenerativeAI } from "@google/generative-ai";
+// Import node-fetch for making HTTP requests in Node.js environment
+// Note: @google/generative-ai SDK is not directly used for imagen-3.0-generate-002:predict
+// as a direct fetch call is more appropriate for its specific API structure.
+import fetch from 'node-fetch'; // Ensure node-fetch is imported for server-side fetch
 
 // This is your serverless function handler
 exports.handler = async function(event, context) {
@@ -45,38 +47,39 @@ exports.handler = async function(event, context) {
     }
 
     try {
-        // Initialize the Generative AI client with your API Key
-        const genAI = new GoogleGenerativeAI(API_KEY);
+        // Construct the API URL for Imagen 3.0
+        const imagenApiUrl = `https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-002:predict?key=${API_KEY}`;
 
-        // Access the Imagen 3.0 model
-        // Note: The model name for image generation is typically 'imagen-3.0-generate-002'
-        // or a similar image-specific model, not a text model like 'gemini-2.0-flash'.
-        // We'll use the correct image generation model here.
-        const model = genAI.getGenerativeModel({ model: "imagen-3.0-generate-002" });
+        // Prepare the payload for the Imagen 3.0 API
+        const payload = {
+            instances: { prompt: prompt },
+            parameters: { "sampleCount": 1 } // Request one image
+        };
 
-        // Send the prompt to the AI model
-        const result = await model.generateContent({
-            contents: [{ parts: [{ text: prompt }] }],
-            generationConfig: {
-                // You can add generation configuration here if needed,
-                // e.g., safety settings, number of images, etc.
-                // For image generation, 'sampleCount' is often used.
-                // However, for simplicity and to avoid complex parsing, we'll request one image.
-                // The prompt itself will guide the image generation.
-            }
+        // Make the direct fetch call to the Imagen 3.0 API
+        const response = await fetch(imagenApiUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
         });
 
-        // Extract the image data (base64 encoded)
-        // The structure for image generation results might differ slightly from text
-        // Ensure you're accessing the correct part of the response for the image bytes
-        const responseData = await result.response;
-        const imageData = responseData.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data;
+        if (!response.ok) {
+            const errorData = await response.json();
+            console.error("Imagen API Error Response:", JSON.stringify(errorData, null, 2));
+            throw new Error(`Imagen API error: ${response.status} - ${errorData.error.message || 'Unknown error'}`);
+        }
+
+        const result = await response.json();
+
+        // Correctly extract the base64 image data for imagen-3.0-generate-002
+        // It's typically found in result.predictions[0].bytesBase64Encoded
+        const imageData = result.predictions?.[0]?.bytesBase64Encoded;
 
         if (!imageData) {
-            console.error("No image data received from API:", JSON.stringify(responseData, null, 2));
+            console.error("No image data received from Imagen API:", JSON.stringify(result, null, 2));
             return {
                 statusCode: 500,
-                body: JSON.stringify({ error: "Failed to generate image: No image data returned." }),
+                body: JSON.stringify({ error: "Failed to generate image: No image data returned from Imagen API." }),
             };
         }
 
@@ -90,10 +93,10 @@ exports.handler = async function(event, context) {
         };
 
     } catch (error) {
-        console.error("Error calling Google AI API:", error);
+        console.error("Error in Netlify function calling Imagen API:", error);
         return {
             statusCode: 500,
-            body: JSON.stringify({ error: `Failed to generate image: ${error.message}` }),
+            body: JSON.stringify({ error: `Server error generating image: ${error.message}` }),
         };
     }
 };
